@@ -8,9 +8,10 @@ namespace WarAtSeaMinisDamageCurve
     /// </summary>
     class Program
     {
-        
+
         static int atkVal;
         static int[] results;
+        static int[] hitValList  = new int[] {0,0,0,1,1,2};
         static void Main(string[] args)
         {
             
@@ -24,10 +25,11 @@ namespace WarAtSeaMinisDamageCurve
                 results[i] = 0;
             }
             double finalDice = calculateMax();
-            for (int i = 0; i <= finalDice; i++)
-            {
-                tallyAmount(convertFromBase10to6(i));
-            }
+            //for (int i = 0; i <= finalDice; i++)
+            //{
+            //    tallyAmount(convertFromBase10to6(i));
+            //}
+            diceCheck(0, 0);
             printArray(results);
         }
 
@@ -100,6 +102,27 @@ namespace WarAtSeaMinisDamageCurve
             // Console.Out.WriteLine("We are evaluating the hits for a roll of" + diceWord);
             // Console.Out.WriteLine("The result was" + result);
             results[result]++;
+            
+        }
+        /// <summary>
+        /// A recursive solution to creating the histogram style array of hit results
+        /// </summary>
+        /// <param name="curHits">The amount of hits currently accrued (default 0)</param>
+        /// <param name="curDepth">How far into the PseudoTree we arer</param>
+        static void diceCheck(int curHits, int curDepth)
+        {
+            foreach(int i in hitValList)
+            {
+                // if we have 1 atk die, this will automatically trigger the first time
+                if (curDepth >= atkVal-1)
+                {
+                    results[curHits+i]++;
+                }
+                else
+                {
+                    diceCheck(curHits + i, curDepth+1); ;
+                }
+            }
             
         }
 
