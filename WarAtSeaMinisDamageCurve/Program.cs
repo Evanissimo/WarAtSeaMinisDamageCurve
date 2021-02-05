@@ -26,10 +26,18 @@ namespace WarAtSeaMinisDamageCurve
             }
             double finalDice = calculateMax();
             //for (int i = 0; i <= finalDice; i++)
+            // Big O: 6^O
             //{
             //    tallyAmount(convertFromBase10to6(i));
             //}
-            diceCheck(0, 0);
+            if (atkVal < 12)
+            {
+                diceCheck(0, 0);
+            }
+            else
+            {
+                monteCarloMethod(atkVal);
+            }
             printArray(results);
         }
 
@@ -106,6 +114,7 @@ namespace WarAtSeaMinisDamageCurve
         }
         /// <summary>
         /// A recursive solution to creating the histogram style array of hit results
+        /// Big O: 6^O
         /// </summary>
         /// <param name="curHits">The amount of hits currently accrued (default 0)</param>
         /// <param name="curDepth">How far into the PseudoTree we arer</param>
@@ -139,6 +148,39 @@ namespace WarAtSeaMinisDamageCurve
             }
             Console.WriteLine("-");
         }
-       
+
+        static void monteCarloMethod(int atkDice)
+        {
+            Random rand = new Random();
+            for (int i = 0; i<100000; i++)
+            {
+                int totATK = 0;
+                for (int k = 0; k < atkDice; k++)
+                {
+                    int atkHit = evaluateDie(rand.Next(6));
+                    
+                    totATK = atkHit + totATK;
+                }
+                
+                results[totATK]++;
+                
+            }
+        }
+       static int evaluateDie(int toEval)
+        {
+            
+            switch(toEval)
+            {
+                default:
+                    return 0;
+                case 3:
+                    return 1;
+                case 4:
+                    return 1;
+                case 5:
+                    return 2;
+            }
+
+        }
     }
 }
